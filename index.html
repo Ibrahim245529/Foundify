@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Foundify helps students at FAST-NUCES Islamabad report, search, and return lost items using Ethereum Sepolia." />
+  <title>Foundify | Lost it? Foundify it.</title>
+  <link rel="icon" type="image/svg+xml" href="assets/foundify-logo.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a class="brand" href="#home" aria-label="Foundify home">
+        <img src="assets/foundify-logo.svg" width="42" height="42" alt="Foundify green search bag logo" />
+        <span>Foundify<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#explore">Explore</a>
+        <a href="#report">Report an item</a>
+        <a href="#my-reports">My reports</a>
+      </nav>
+      <div class="nav-wallet">
+        <span id="walletPill" class="wallet-pill"><span class="status-dot"></span> Not connected</span>
+        <button id="connectWalletBtn" class="btn btn-dark btn-small" type="button">Connect MetaMask</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-mark">✦</span> MADE FOR FAST ISLAMABAD</div>
+          <h1>Lost it?<br /><span>Foundify it.</span></h1>
+          <p class="hero-description">Your campus, your belongings, your community. Report lost or found items, browse real campus reports, and keep handovers accountable on the Sepolia blockchain.</p>
+          <div class="hero-actions">
+            <a id="heroLostLink" class="btn btn-primary" href="#report">Report a lost item <span aria-hidden="true">↗</span></a>
+            <a id="heroFoundLink" class="btn btn-outline" href="#report">I found something</a>
+          </div>
+          <div class="hero-footnote"><span class="footnote-dot"></span> Built for FAST-NUCES Islamabad students · Testnet only</div>
+        </div>
+        <div class="hero-art-wrap">
+          <div class="hero-art-label">Every item has a way back.</div>
+          <img class="hero-art" src="assets/hero-illustration.svg" alt="Illustration of a backpack, scientific calculator and location pin" />
+          <div class="hero-art-pill">📍 13 campus locations</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="statistics-section" aria-labelledby="statsHeading">
+      <div class="container">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="overline">CAMPUS OVERVIEW</p>
+            <h2 id="statsHeading">A little more found. A lot less lost.</h2>
+          </div>
+          <span class="section-caption">Live counts from the contract</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-icon">▦</span><strong id="statTotal" class="stat-value">—</strong><span class="stat-label">Total reports</span></div>
+          <div class="stat-card"><span class="stat-icon accent-coral">⌕</span><strong id="statLost" class="stat-value">—</strong><span class="stat-label">Lost items</span></div>
+          <div class="stat-card"><span class="stat-icon accent-green">✓</span><strong id="statFound" class="stat-value">—</strong><span class="stat-label">Found items</span></div>
+          <div class="stat-card"><span class="stat-icon accent-gold">↗</span><strong id="statResolved" class="stat-value">—</strong><span class="stat-label">Resolved reports</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="setup-section" aria-labelledby="setupHeading">
+      <div class="container setup-panel">
+        <div class="setup-copy">
+          <p class="overline">ONE-TIME PROJECT SETUP</p>
+          <h2 id="setupHeading">Point Foundify to your contract</h2>
+          <p>After deploying <code>SmartContract.sol</code> through Remix on Sepolia, paste the deployed address here. The address is saved only in this browser.</p>
+        </div>
+        <div class="setup-controls">
+          <label for="contractAddress">Sepolia contract address</label>
+          <div class="setup-input-row">
+            <input id="contractAddress" type="text" spellcheck="false" autocomplete="off" placeholder="0x... paste address after deployment" aria-describedby="contractHint" />
+            <button class="btn btn-primary" id="saveContractBtn" type="button">Load contract</button>
+          </div>
+          <p class="field-hint" id="contractHint">No contract loaded yet. You can explore the layout before deploying.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="report" class="report-section" aria-labelledby="reportHeading">
+      <div class="container report-layout">
+        <div class="section-intro">
+          <p class="overline">MAKE A REPORT</p>
+          <h2 id="reportHeading">Help something find its way home.</h2>
+          <p>Whether your calculator went missing in C Block or you discovered someone's keys near CS Lawn, sharing a report is the first step.</p>
+          <div class="help-note">
+            <span class="help-icon">♡</span>
+            <div><strong>A little safety reminder</strong><p>Don't publish phone numbers, student IDs, or private ownership details. Blockchain reports are public and permanent.</p></div>
+          </div>
+        </div>
+
+        <form id="reportForm" class="report-form" novalidate>
+          <h3>Tell us about the item</h3>
+          <p class="form-subtitle">Fields marked * are required. A Sepolia transaction is needed to submit.</p>
+          <fieldset class="type-fieldset">
+            <legend>What happened? <span aria-hidden="true">*</span></legend>
+            <div class="radio-pills">
+              <label class="type-pill"><input type="radio" name="reportType" value="0" checked /><span>⌕ &nbsp; I lost something</span></label>
+              <label class="type-pill"><input type="radio" name="reportType" value="1" /><span>✓ &nbsp; I found something</span></label>
+            </div>
+          </fieldset>
+          <div class="form-grid">
+            <div class="field full-width"><label for="itemName">Item name *</label><input id="itemName" maxlength="80" required placeholder="e.g. Black Casio calculator" /></div>
+            <div class="field"><label for="itemCategory">Category *</label><select id="itemCategory" required><option value="">Select category</option><option>Electronics</option><option>Books &amp; Stationery</option><option>ID Cards</option><option>Keys</option><option>Clothing &amp; Accessories</option><option>Other</option></select></div>
+            <div class="field"><label for="itemLocation">Where did it happen? *</label><select id="itemLocation" required><option value="">Select campus location</option><option>A Block</option><option>B Block</option><option>C Block</option><option>D Block</option><option>Library</option><option>Cafe</option><option>Masjid</option><option>Cricket Ground</option><option>Futsal Ground</option><option>CS Lawn</option><option>D Block Parking</option><option>Faculty Parking</option><option>Other</option></select></div>
+            <div class="field full-width"><label for="itemDescription">Description *</label><textarea id="itemDescription" rows="4" maxlength="500" required placeholder="What does it look like? Share enough to recognize it, but keep private ownership details for the handover."></textarea><span class="field-hint">Maximum 500 characters</span></div>
+            <div class="field"><label for="itemDate">Approximate date *</label><input id="itemDate" type="date" required /></div>
+            <div class="field"><label for="handoverSpot">Preferred public handover spot *</label><select id="handoverSpot" required><option value="">Choose a safe meeting point</option><option>Library Entrance</option><option>Cafe Entrance</option><option>CS Lawn</option><option>A Block Entrance</option><option>B Block Entrance</option><option>C Block Entrance</option><option>D Block Entrance</option><option>Cricket Ground</option><option>Futsal Ground</option></select></div>
+          </div>
+          <button class="btn btn-primary btn-wide" id="submitReportBtn" type="submit">Publish report with MetaMask <span aria-hidden="true">↗</span></button>
+          <p class="form-disclaimer">No payment for the item. Sepolia test ETH is used only to cover blockchain gas fees.</p>
+        </form>
+      </div>
+    </section>
+
+    <section id="explore" class="explore-section" aria-labelledby="exploreHeading">
+      <div class="container">
+        <div class="section-heading">
+          <div><p class="overline">EXPLORE ITEMS</p><h2 id="exploreHeading">See what's lost. See what's found.</h2><p>Search community reports from around FAST Islamabad.</p></div>
+          <button id="refreshBtn" class="btn btn-outline btn-small" type="button">↻ Refresh blockchain data</button>
+        </div>
+        <div class="filter-panel">
+          <div class="search-field"><span aria-hidden="true">⌕</span><label class="sr-only" for="searchReports">Search item names and descriptions</label><input id="searchReports" type="search" placeholder="Search calculator, ID card, keys..." /></div>
+          <label class="sr-only" for="filterType">Filter by report type</label><select id="filterType"><option value="all">Lost + found</option><option value="0">Lost only</option><option value="1">Found only</option></select>
+          <label class="sr-only" for="filterStatus">Filter by status</label><select id="filterStatus"><option value="all">Any status</option><option value="0">Open</option><option value="1">Claim pending</option><option value="2">Resolved</option></select>
+          <label class="sr-only" for="filterLocation">Filter by campus location</label><select id="filterLocation"><option value="all">Anywhere on campus</option><option>A Block</option><option>B Block</option><option>C Block</option><option>D Block</option><option>Library</option><option>Cafe</option><option>Masjid</option><option>Cricket Ground</option><option>Futsal Ground</option><option>CS Lawn</option><option>D Block Parking</option><option>Faculty Parking</option><option>Other</option></select>
+        </div>
+        <p id="resultCount" class="result-count" aria-live="polite">Enter a deployed contract address above to load real reports.</p>
+        <div id="reportGrid" class="report-grid"><div class="empty-state"><span>⌕</span><h3>No blockchain data yet</h3><p>Load your Sepolia contract address to browse published reports.</p></div></div>
+      </div>
+    </section>
+
+    <section id="my-reports" class="my-section" aria-labelledby="myReportsHeading">
+      <div class="container">
+        <div class="section-heading"><div><p class="overline">YOUR CONTRIBUTION</p><h2 id="myReportsHeading">My reports</h2><p>Only the reporter can reject a pending claim or confirm a completed return.</p></div></div>
+        <div id="myReportGrid" class="report-grid"><div class="empty-state"><span>◉</span><h3>Your reports appear here</h3><p>Connect MetaMask to see reports associated with your wallet address.</p></div></div>
+      </div>
+    </section>
+
+    <section class="how-section" aria-labelledby="howHeading">
+      <div class="container">
+        <p class="overline">HOW IT WORKS</p><h2 id="howHeading">Three steps, a better campus.</h2>
+        <ul class="how-list"><li><span>01</span><div><strong>Report</strong><p>Connect your wallet and record an item on Sepolia.</p></div></li><li><span>02</span><div><strong>Request</strong><p>Someone submits a claim. Only one can be pending.</p></div></li><li><span>03</span><div><strong>Return</strong><p>Arrange a safe campus handover; the reporter then resolves the item.</p></div></li></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-row"><div><a class="footer-brand" href="#home">Foundify<span>.</span></a><p>Lost it? Foundify it. · FAST-NUCES Islamabad</p></div><div class="footer-links"><a href="https://sepolia.etherscan.io" target="_blank" rel="noopener noreferrer">Sepolia Etherscan ↗</a><a href="https://remix.ethereum.org" target="_blank" rel="noopener noreferrer">Remix IDE ↗</a></div><small>MG3012 mini dApp · Student project, not an official university service</small></div></footer>
+
+  <dialog id="itemDialog" class="item-dialog" aria-labelledby="dialogTitle"><div class="dialog-top"><p class="overline">REPORT DETAILS</p><button type="button" id="closeDialogBtn" class="icon-btn" aria-label="Close report details">✕</button></div><h2 id="dialogTitle">Item details</h2><div id="dialogContent"></div><div id="dialogActions" class="dialog-actions"></div></dialog>
+
+  <div id="txNotice" class="tx-notice" role="status" aria-live="polite" hidden><button id="closeNoticeBtn" class="notice-close" type="button" aria-label="Dismiss notification">✕</button><strong id="noticeTitle">Foundify</strong><p id="noticeText"></p><a id="noticeLink" class="notice-link" href="#" target="_blank" rel="noopener noreferrer" hidden>View transaction on Etherscan ↗</a></div>
+
+  <!-- ethers.js handles the MetaMask provider, contract calls and transactions. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.15.0/ethers.umd.min.js"></script>
+  <script>
+  "use strict";
+
+  // Contract ABI: all five Solidity functions plus events for transaction receipts.
+  // getItem returns an Item struct, so its output is an ABI tuple.
+  const CONTRACT_ABI = [
+    "function reportItem(uint8 reportType, string name, string category, string location, string description, uint256 approximateDate, string handoverSpot)",
+    { type: "function", name: "getItem", stateMutability: "view", inputs: [{ name: "itemId", type: "uint256" }], outputs: [{ name: "", type: "tuple", components: [
+      { name: "id", type: "uint256" }, { name: "reporter", type: "address" }, { name: "claimant", type: "address" },
+      { name: "reportType", type: "uint8" }, { name: "status", type: "uint8" }, { name: "name", type: "string" },
+      { name: "category", type: "string" }, { name: "location", type: "string" }, { name: "description", type: "string" },
+      { name: "approximateDate", type: "uint256" }, { name: "handoverSpot", type: "string" }, { name: "createdAt", type: "uint256" }
+    ] }] },
+    "function getTotalItems() view returns (uint256)",
+    "function requestClaim(uint256 itemId)",
+    "function reviewClaim(uint256 itemId, bool returned)",
+    "event ItemReported(uint256 indexed itemId, address indexed reporter, uint8 reportType)",
+    "event ClaimRequested(uint256 indexed itemId, address indexed claimant)",
+    "event ClaimReviewed(uint256 indexed itemId, address indexed claimant, bool returned)"
+  ];
+
+  const SEPOLIA_CHAIN_ID = "0xaa36a7";
+  const SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
+  const ETHERSCAN_TX = "https://sepolia.etherscan.io/tx/";
+  const ADDRESS_STORAGE_KEY = "foundify_sepolia_contract_v1";
+  const EMPTY_ADDRESS = "0x0000000000000000000000000000000000000000";
+  const $ = (id) => document.getElementById(id);
+
+  let contractAddress = "";
+  let walletAddress = "";
+  let signer = null;
+  let allItems = [];
+  let selectedItemId = null;
+  let isBusy = false;
+  let hasLoaded = false;
+
+  function shortAddress(address) { return address ? `${address.slice(0, 6)}…${address.slice(-4)}` : ""; }
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  }
+  function showNotice(title, message, kind = "info", hash = "") {
+    const notice = $("txNotice");
+    notice.className = `tx-notice ${kind}`;
+    $("noticeTitle").textContent = title;
+    $("noticeText").textContent = message;
+    $("noticeLink").hidden = !hash;
+    if (hash) $("noticeLink").href = ETHERSCAN_TX + encodeURIComponent(hash);
+    notice.hidden = false;
+  }
+  function friendlyError(error) {
+    if (error && (error.code === 4001 || error.code === "ACTION_REJECTED")) return "You cancelled the MetaMask request.";
+    if (error && error.code === "INSUFFICIENT_FUNDS") return "Your wallet needs Sepolia test ETH to cover gas.";
+    const reason = error && (error.reason || error.shortMessage || error.message);
+    return String(reason || "Something went wrong. Please try again.").slice(0, 260);
+  }
+  function setBusy(busy) {
+    isBusy = busy;
+    ["submitReportBtn", "connectWalletBtn", "saveContractBtn", "refreshBtn"].forEach(id => { $(id).disabled = busy; });
+    document.querySelectorAll("[data-action]").forEach(button => { button.disabled = busy; });
+  }
+  function localDate() {
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  }
+  function formatDate(seconds) {
+    return new Date(Number(seconds) * 1000).toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  }
+  function statusLabel(status) { return ["Open", "Claim Pending", "Resolved"][status] || "Unknown"; }
+  function reportLabel(type) { return type === 0 ? "Lost" : "Found"; }
+  function badgeType(type) { return type === 0 ? "badge-lost" : "badge-found"; }
+  function normalizeItem(result) {
+    return {
+      id: Number(result.id), reporter: result.reporter, claimant: result.claimant,
+      reportType: Number(result.reportType), status: Number(result.status),
+      name: result.name, category: result.category, location: result.location,
+      description: result.description, approximateDate: Number(result.approximateDate),
+      handoverSpot: result.handoverSpot, createdAt: Number(result.createdAt)
+    };
+  }
+
+  async function readContract() {
+    if (!window.ethers) throw new Error("ethers.js did not load. Check your internet connection.");
+    if (!contractAddress || !ethers.isAddress(contractAddress)) throw new Error("Enter your deployed Sepolia contract address first.");
+    // When the wallet is on Sepolia, use the same provider so new transactions appear quickly.
+    if (window.ethereum) {
+      try {
+        const network = await window.ethereum.request({ method: "eth_chainId" });
+        if (network.toLowerCase() === SEPOLIA_CHAIN_ID) {
+          return new ethers.Contract(contractAddress, CONTRACT_ABI, new ethers.BrowserProvider(window.ethereum));
+        }
+      } catch (_) { /* Reading must not require a connected wallet. */ }
+    }
+    return new ethers.Contract(contractAddress, CONTRACT_ABI, new ethers.JsonRpcProvider(SEPOLIA_RPC));
+  }
+
+  async function connectWallet() {
+    if (!window.ethereum) {
+      showNotice("MetaMask not detected", "Install the MetaMask browser extension, then refresh this page.", "error");
+      return;
+    }
+    if (!window.ethers) { showNotice("Library unavailable", "Unable to load ethers.js. Please check your internet connection.", "error"); return; }
+    try {
+      setBusy(true);
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      if (!accounts.length) throw new Error("No wallet account was provided.");
+      const currentChain = await window.ethereum.request({ method: "eth_chainId" });
+      if (currentChain.toLowerCase() !== SEPOLIA_CHAIN_ID) {
+        try {
+          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: SEPOLIA_CHAIN_ID }] });
+        } catch (error) {
+          if (error.code !== 4902) throw error;
+          await window.ethereum.request({ method: "wallet_addEthereumChain", params: [{
+            chainId: SEPOLIA_CHAIN_ID, chainName: "Sepolia", nativeCurrency: { name: "Sepolia ETH", symbol: "ETH", decimals: 18 },
+            rpcUrls: [SEPOLIA_RPC], blockExplorerUrls: ["https://sepolia.etherscan.io"]
+          }] });
+        }
+      }
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      signer = await provider.getSigner();
+      walletAddress = await signer.getAddress();
+      renderWallet();
+      renderMyReports();
+      showNotice("Wallet connected", `${shortAddress(walletAddress)} is ready on Sepolia.`, "success");
+      if (contractAddress) await loadReports();
+    } catch (error) {
+      showNotice("Wallet connection failed", friendlyError(error), "error");
+    } finally { setBusy(false); }
+  }
+  function renderWallet() {
+    $("walletPill").innerHTML = `<span class="status-dot"></span> ${walletAddress ? escapeHtml(shortAddress(walletAddress)) : "Not connected"}`;
+    $("walletPill").classList.toggle("connected", Boolean(walletAddress));
+    $("connectWalletBtn").textContent = walletAddress ? "Connected" : "Connect MetaMask";
+  }
+  async function requireWriteContract() {
+    if (!walletAddress || !signer) throw new Error("Connect MetaMask before writing to the blockchain.");
+    if (!contractAddress || !ethers.isAddress(contractAddress)) throw new Error("Load your deployed contract address first.");
+    const chain = await window.ethereum.request({ method: "eth_chainId" });
+    if (chain.toLowerCase() !== SEPOLIA_CHAIN_ID) throw new Error("Switch MetaMask to Ethereum Sepolia, then try again.");
+    return new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+  }
+  function saveContractAddress() {
+    if (!window.ethers) { showNotice("Library unavailable", "ethers.js was not loaded. Check your internet connection.", "error"); return; }
+    const entered = $("contractAddress").value.trim();
+    if (!ethers.isAddress(entered)) { showNotice("Invalid contract address", "Paste a full Ethereum contract address starting with 0x.", "error"); return; }
+    contractAddress = ethers.getAddress(entered);
+    try { localStorage.setItem(ADDRESS_STORAGE_KEY, contractAddress); } catch (_) { /* Optional browser storage. */ }
+    $("contractHint").textContent = `Selected: ${shortAddress(contractAddress)} · Sepolia`;
+    showNotice("Contract address saved", "Now loading real data from Sepolia.", "info");
+    loadReports();
+  }
+
+  async function loadReports() {
+    if (!contractAddress) return;
+    $("resultCount").textContent = "Loading reports from Sepolia…";
+    try {
+      const contract = await readContract();
+      const total = Number(await contract.getTotalItems());
+      const fresh = [];
+      // Work in small batches to avoid overloading a free RPC endpoint.
+      for (let start = 1; start <= total; start += 8) {
+        const ids = Array.from({ length: Math.min(8, total - start + 1) }, (_, j) => start + j);
+        const batch = await Promise.all(ids.map(async (id) => normalizeItem(await contract.getItem(id))));
+        fresh.push(...batch);
+      }
+      allItems = fresh.sort((a, b) => b.id - a.id);
+      hasLoaded = true;
+      renderAll();
+    } catch (error) {
+      hasLoaded = false;
+      allItems = [];
+      renderAll();
+      showNotice("Couldn't load reports", `Check the contract address and Sepolia connection. ${friendlyError(error)}`, "error");
+    }
+  }
+  function renderStats() {
+    for (const [key, count] of Object.entries({
+      statTotal: allItems.length, statLost: allItems.filter(i => i.reportType === 0).length,
+      statFound: allItems.filter(i => i.reportType === 1).length, statResolved: allItems.filter(i => i.status === 2).length
+    })) $(key).textContent = hasLoaded ? count : "—";
+  }
+  function filteredItems() {
+    const query = $("searchReports").value.trim().toLowerCase();
+    const type = $("filterType").value;
+    const status = $("filterStatus").value;
+    const location = $("filterLocation").value;
+    return allItems.filter(item =>
+      (type === "all" || String(item.reportType) === type) &&
+      (status === "all" || String(item.status) === status) &&
+      (location === "all" || item.location === location) &&
+      (!query || `${item.name} ${item.description} ${item.category} ${item.location}`.toLowerCase().includes(query))
+    );
+  }
+  function emptyState(icon, title, description) {
+    return `<div class="empty-state"><span>${icon}</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p></div>`;
+  }
+  function itemCard(item) {
+    return `<article class="item-card">
+      <div class="item-card-top"><span class="report-id">REPORT #${item.id}</span><span class="type-badge ${badgeType(item.reportType)}">${reportLabel(item.reportType)}</span></div>
+      <h3>${escapeHtml(item.name)}</h3>
+      <div class="item-meta"><span>📍 ${escapeHtml(item.location)}</span><span>◷ ${escapeHtml(formatDate(item.approximateDate))}</span></div>
+      <p class="item-description">${escapeHtml(item.description)}</p>
+      <div class="item-card-bottom"><span class="state-badge state-${item.status}">${escapeHtml(statusLabel(item.status))}</span><button type="button" class="text-button" data-action="details" data-id="${item.id}">View details ↗</button></div>
+    </article>`;
+  }
+  function renderReports() {
+    if (!hasLoaded) {
+      $("resultCount").textContent = contractAddress ? "No data loaded — verify your contract." : "Enter a deployed contract address above to load real reports.";
+      $("reportGrid").innerHTML = emptyState("⌕", "No blockchain data yet", "Load your Sepolia contract address to browse published reports.");
+      return;
+    }
+    const matches = filteredItems();
+    $("resultCount").textContent = `${matches.length} of ${allItems.length} reports shown`;
+    $("reportGrid").innerHTML = matches.length ? matches.map(itemCard).join("") : emptyState("⌕", "No matching reports", "Try clearing some filters, or publish the first report.");
+  }
+  function renderMyReports() {
+    if (!walletAddress) {
+      $("myReportGrid").innerHTML = emptyState("◉", "Your reports appear here", "Connect MetaMask to view reports associated with your wallet address.");
+      return;
+    }
+    const mine = allItems.filter(i => i.reporter.toLowerCase() === walletAddress.toLowerCase());
+    $("myReportGrid").innerHTML = mine.length ? mine.map(itemCard).join("") : emptyState("⌕", "No reports from this wallet", "When you publish a report, it will appear here.");
+  }
+  function renderAll() { renderStats(); renderReports(); renderMyReports(); if ($( "itemDialog" ).open && selectedItemId !== null) openItem(selectedItemId); }
+
+  function openItem(itemId) {
+    const item = allItems.find(i => i.id === itemId);
+    if (!item) return;
+    selectedItemId = itemId;
+    $("dialogTitle").textContent = item.name;
+    const mine = Boolean(walletAddress) && walletAddress.toLowerCase() === item.reporter.toLowerCase();
+    $("dialogContent").innerHTML = `
+      <div class="dialog-tags"><span class="type-badge ${badgeType(item.reportType)}">${reportLabel(item.reportType)}</span><span class="state-badge state-${item.status}">${statusLabel(item.status)}</span><span class="report-id">#${item.id}</span></div>
+      <p class="dialog-description">${escapeHtml(item.description)}</p>
+      <dl class="detail-list"><div><dt>Category</dt><dd>${escapeHtml(item.category)}</dd></div><div><dt>Campus location</dt><dd>${escapeHtml(item.location)}</dd></div><div><dt>Approximate date</dt><dd>${escapeHtml(formatDate(item.approximateDate))}</dd></div><div><dt>Preferred handover</dt><dd>${escapeHtml(item.handoverSpot)}</dd></div><div><dt>Reported by</dt><dd class="mono-wrap">${escapeHtml(item.reporter)}</dd></div>${item.status !== 0 ? `<div><dt>Claimant wallet</dt><dd class="mono-wrap">${escapeHtml(item.claimant)}</dd></div>` : ""}<div><dt>Posted on</dt><dd>${escapeHtml(formatDate(item.createdAt))}</dd></div></dl>
+      <p class="detail-warning">Verify ownership privately. A wallet claim alone does not prove who owns the item. Arrange handovers in a public campus location.</p>`;
+    let actions = "";
+    if (item.status === 0 && !mine) {
+      actions = `<button type="button" class="btn btn-primary" data-action="claim" data-id="${item.id}">${item.reportType === 0 ? "I Found This" : "This Is Mine"} ↗</button>`;
+    } else if (item.status === 1 && mine) {
+      actions = `<button type="button" class="btn btn-outline" data-action="reject" data-id="${item.id}">Reject claim</button><button type="button" class="btn btn-primary" data-action="resolve" data-id="${item.id}">Confirm returned ✓</button>`;
+    } else if (item.status === 1 && !mine) {
+      actions = `<p class="dialog-helper">A claim is pending. Only the original reporter can review it.</p>`;
+    } else if (item.status === 2) {
+      actions = `<p class="dialog-helper">This report has been resolved and is closed to new claims.</p>`;
+    } else {
+      actions = `<p class="dialog-helper">You created this report. Wait for another wallet to request a claim.</p>`;
+    }
+    $("dialogActions").innerHTML = actions;
+    if (!$("itemDialog").open) $("itemDialog").showModal();
+  }
+
+  async function sendWrite(label, transactionFactory) {
+    if (isBusy) return;
+    try {
+      setBusy(true);
+      const contract = await requireWriteContract();
+      showNotice("Confirm in MetaMask", `Please approve: ${label}.`, "info");
+      const tx = await transactionFactory(contract);
+      showNotice("Transaction submitted", "Waiting for Sepolia to confirm your transaction…", "info", tx.hash);
+      const receipt = await tx.wait();
+      if (!receipt || receipt.status !== 1) throw new Error("The transaction was not successful.");
+      $("itemDialog").close();
+      selectedItemId = null;
+      showNotice("Transaction confirmed", `${label} — confirmed on Sepolia.`, "success", tx.hash);
+      await loadReports();
+      return receipt;
+    } catch (error) {
+      showNotice("Action not completed", friendlyError(error), "error");
+      return null;
+    } finally { setBusy(false); }
+  }
+
+  async function handleReport(event) {
+    event.preventDefault();
+    if (isBusy) return;
+    const form = $("reportForm");
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const reportType = Number(form.querySelector('input[name="reportType"]:checked').value);
+    const name = $("itemName").value.trim();
+    const category = $("itemCategory").value;
+    const location = $("itemLocation").value;
+    const description = $("itemDescription").value.trim();
+    const approximateDate = Math.floor(Date.parse($("itemDate").value + "T00:00:00Z") / 1000);
+    const handoverSpot = $("handoverSpot").value;
+    if (!name || !description || !category || !location || !handoverSpot || !Number.isFinite(approximateDate)) {
+      showNotice("Missing information", "Complete every required field before publishing.", "error"); return;
+    }
+    if (approximateDate > Math.floor(Date.now() / 1000)) { showNotice("Future date", "Choose today or an earlier date.", "error"); return; }
+    // Solidity validates UTF-8 byte lengths; check them here for a clearer message.
+    const enc = new TextEncoder();
+    if (enc.encode(name).length > 80 || enc.encode(description).length > 500) {
+      showNotice("Text too long", "Use up to 80 bytes for the name and 500 bytes for the description.", "error"); return;
+    }
+    const receipt = await sendWrite("Publish item report", c => c.reportItem(reportType, name, category, location, description, BigInt(approximateDate), handoverSpot));
+    if (receipt) { form.reset(); $("itemDate").value = localDate(); }
+  }
+
+  async function handleItemAction(action, itemId) {
+    const item = allItems.find(i => i.id === itemId);
+    if (!item) return;
+    if (action === "details") { openItem(itemId); return; }
+    if (action === "claim") {
+      await sendWrite(`Submit claim for report #${itemId}`, c => c.requestClaim(itemId));
+    } else if (action === "reject") {
+      if (window.confirm("Reject this claim? The report will become open again.")) {
+        await sendWrite(`Reject claim for report #${itemId}`, c => c.reviewClaim(itemId, false));
+      }
+    } else if (action === "resolve") {
+      if (window.confirm("Confirm ONLY after the item was physically returned. Resolve this report?")) {
+        await sendWrite(`Resolve report #${itemId}`, c => c.reviewClaim(itemId, true));
+      }
+    }
+  }
+
+  $("connectWalletBtn").addEventListener("click", connectWallet);
+  $("saveContractBtn").addEventListener("click", saveContractAddress);
+  $("refreshBtn").addEventListener("click", () => {
+    if (!contractAddress) { showNotice("No contract yet", "Paste your Sepolia contract address in the setup area first.", "info"); return; }
+    loadReports();
+  });
+  $("reportForm").addEventListener("submit", handleReport);
+  ["searchReports", "filterType", "filterStatus", "filterLocation"].forEach(id => {
+    $(id).addEventListener(id === "searchReports" ? "input" : "change", renderReports);
+  });
+  $("closeDialogBtn").addEventListener("click", () => $("itemDialog").close());
+  $("closeNoticeBtn").addEventListener("click", () => { $("txNotice").hidden = true; });
+  $("itemDialog").addEventListener("click", e => { if (e.target === $("itemDialog")) $("itemDialog").close(); });
+  document.addEventListener("click", e => {
+    const button = e.target.closest("[data-action]");
+    if (button && !isBusy) handleItemAction(button.dataset.action, Number(button.dataset.id));
+  });
+  $("heroLostLink").addEventListener("click", () => { document.querySelector('input[name="reportType"][value="0"]').checked = true; });
+  $("heroFoundLink").addEventListener("click", () => { document.querySelector('input[name="reportType"][value="1"]').checked = true; });
+  $("itemDate").value = localDate();
+  $("itemDate").max = localDate();
+  try {
+    const saved = localStorage.getItem(ADDRESS_STORAGE_KEY);
+    if (saved && /^0x[0-9a-fA-F]{40}$/.test(saved)) {
+      $("contractAddress").value = saved;
+      contractAddress = saved;
+      $("contractHint").textContent = `Selected: ${shortAddress(saved)} · Sepolia`;
+    }
+  } catch (_) { /* localStorage is optional */ }
+  if (window.ethereum && typeof window.ethereum.on === "function") {
+    window.ethereum.on("accountsChanged", accounts => {
+      // If the user changes accounts, require them to connect again.
+      if (!accounts.length || (walletAddress && accounts[0].toLowerCase() !== walletAddress.toLowerCase())) {
+        walletAddress = ""; signer = null; renderWallet(); renderMyReports();
+        showNotice("Wallet changed", "Click Connect MetaMask to use the currently selected account.", "info");
+      }
+    });
+    window.ethereum.on("chainChanged", () => {
+      walletAddress = ""; signer = null; renderWallet(); renderMyReports();
+      showNotice("Network changed", "Connect MetaMask again on Sepolia before writing any transaction.", "info");
+      if (contractAddress) loadReports();
+    });
+  }
+  renderWallet();
+  if (contractAddress) loadReports();
+  </script>
+</body>
+</html>

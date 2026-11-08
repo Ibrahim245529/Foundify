@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" viewBox="0 0 600 420" role="img" aria-labelledby="title description">
+ <title id="title">Illustration of a campus backpack, calculator and location pin</title>
+ <desc id="description">Friendly green illustration for a campus lost and found app</desc>
+ <rect x="38" y="35" width="525" height="355" rx="42" fill="#E6F3E9"/>
+ <circle cx="125" cy="94" r="38" fill="#C9E6D5"/>
+ <circle cx="491" cy="315" r="45" fill="#C9E6D5"/>
+ <path d="M110 310q188 56 368 0" fill="none" stroke="#B2D6C0" stroke-width="7" stroke-linecap="round"/>
+ <!-- backpack -->
+ <rect x="173" y="116" width="208" height="205" rx="53" fill="#117057"/>
+ <path d="M235 115V93c0-40 82-40 82 0v23" fill="none" stroke="#0A4C3B" stroke-width="19" stroke-linecap="round"/>
+ <rect x="193" y="151" width="168" height="154" rx="42" fill="#219474"/>
+ <rect x="220" y="217" width="116" height="87" rx="20" fill="#B9E9D2"/>
+ <path d="M220 243h116" stroke="#76BE9C" stroke-width="6"/>
+ <rect x="244" y="221" width="68" height="13" rx="6" fill="#117057"/>
+ <path d="M174 183c-38-2-48 49-32 81m242-81c38-2 48 49 32 81" fill="none" stroke="#0D614B" stroke-width="15" stroke-linecap="round"/>
+ <!-- card with calculator -->
+ <g transform="translate(365 94) rotate(10)">
+   <rect width="132" height="165" rx="20" fill="#FFFFFF" stroke="#D6E7DB" stroke-width="3"/>
+   <rect x="34" y="21" width="64" height="110" rx="10" fill="#234A40"/>
+   <rect x="44" y="32" width="44" height="24" rx="4" fill="#B4F0D0"/>
+   <g fill="#7EBFA7"><rect x="44" y="66" width="11" height="11" rx="3"/><rect x="60" y="66" width="11" height="11" rx="3"/><rect x="77" y="66" width="11" height="11" rx="3"/><rect x="44" y="83" width="11" height="11" rx="3"/><rect x="60" y="83" width="11" height="11" rx="3"/><rect x="77" y="83" width="11" height="11" rx="3"/><rect x="44" y="100" width="11" height="21" rx="3"/><rect x="60" y="100" width="28" height="21" rx="3"/></g>
+ </g>
+ <!-- location pin -->
+ <g transform="translate(104 157) rotate(-13)">
+   <path d="M51 4c27 0 48 21 48 48 0 37-48 81-48 81S3 89 3 52C3 25 24 4 51 4Z" fill="#F2BE69" stroke="#FDF5E8" stroke-width="8"/>
+   <circle cx="51" cy="50" r="18" fill="#FFF9ED"/>
+ </g>
+ <g fill="#5CA88B"><circle cx="96" cy="344" r="7"/><circle cx="448" cy="58" r="6"/><circle cx="523" cy="238" r="5"/></g>
+ <g stroke="#7EBDA3" stroke-width="6" stroke-linecap="round"><path d="M111 45v18m-9-9h18"/><path d="M485 367v18m-9-9h18"/></g>
+</svg>

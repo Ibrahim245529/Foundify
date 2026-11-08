@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">Foundify logo</title>
+  <rect width="96" height="96" rx="26" fill="#116D55"/>
+  <path d="M25 48V30c0-4 3-7 7-7h32c4 0 7 3 7 7v26c0 4-3 7-7 7H48" fill="none" stroke="#F5F2E8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M38 23v-5a10 10 0 0 1 20 0v5" fill="none" stroke="#A7EACD" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="38" cy="59" r="14" fill="#B4F0D0" stroke="#116D55" stroke-width="3"/>
+  <path d="m48 69 13 13" stroke="#B4F0D0" stroke-width="8" stroke-linecap="round"/>
+</svg>
